@@ -8,4 +8,9 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
+  resolve: {  // 配置路径别名--解析@路径
+    alias: {
+      '@': '/src',
+    },
+  },
 })
