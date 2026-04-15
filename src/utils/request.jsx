@@ -11,6 +11,7 @@ request.interceptors.request.use(
     (config) => {
         const token=getToken()
         if(token){
+            // 若本地有token，就每次请求都添加token到headers中
             config.headers.Authorization=`Bearer ${token}`
         }
         return config

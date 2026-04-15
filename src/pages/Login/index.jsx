@@ -23,10 +23,10 @@ const Login = () => {
                 <Form onFinish={onFinish} validateTrigger='onBlur'>
                     {/* 无需显式传参，可以自动传参，也无需用箭头函数 */}
                     <Form.Item
-                    name="phone"
+                    name="mobile"
                     rules={[
                         {required: true, message: '请输入手机号' },
-                        {pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号' }
+                        {pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号' }
                         ]}
                     >
                         <Input size="large" placeholder="请输入手机号" />
@@ -37,7 +37,7 @@ const Login = () => {
                         {required: true, message: '请输入验证码' }
                         ]}
                     >
-                        <Input size="large" placeholder="请输入验证码" />
+                        <Input size="large" placeholder="请输入验证码" maxLength={6} />
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" size="large" block>
