@@ -1,18 +1,29 @@
 //登录页
 import './index.scss'
-import { Card, Form, Input, Button } from 'antd'
+import { Card, Form, Input, Button, message } from 'antd'
 import logo from '@/assets/logo.png'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
+
 
 const Login = () => {
-    const onFinish = (values) => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const onFinish = async (values) => {
         console.log(values)
+        await dispatch(fetchLogin(values))
+        navigate('/')
+        message.success('登录成功')
     }
+
     return (
         <div className="login">
             <Card className="login-container">
                 <img className="login-logo" src={logo} alt="" />
                 {/* 登录表单 */}
                 <Form onFinish={onFinish} validateTrigger='onBlur'>
+                    {/* 无需显式传参，可以自动传参，也无需用箭头函数 */}
                     <Form.Item
                     name="phone"
                     rules={[
