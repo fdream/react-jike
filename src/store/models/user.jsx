@@ -1,6 +1,7 @@
 //用户相关的状态管理  三步走
 import { createSlice } from '@reduxjs/toolkit'
 import {request, getToken, setToken , removeToken} from '@/utils'
+import { loginAPI, getUserInfoAPI } from '@/apis/user'
 
 const userStore = createSlice({
     name: 'user',
@@ -28,9 +29,9 @@ const userStore = createSlice({
     }
 })
 
-// 解构出同步修改方法给异步用,导出部分方法给外面用
+// 1.解构出同步修改方法给异步用  2.导出部分方法给外面用
 export const { setTokenInfo, setUserInfo, clearUserInfo } = userStore.actions
-export default userStore.reducer//导出reducer
+export default userStore.reducer
 // 替换成上面const userReducer = userStore.reducer
 
 // export { setTokenInfo, setUserInfo }
@@ -39,7 +40,7 @@ export default userStore.reducer//导出reducer
 //🦖异步修改方法
 export const fetchLogin = (loginForm) => {
     return async (dispatch) => {  //传入dispatch函数 return可省略
-        const res = await request.post('/authorizations', loginForm)
+        const res = await loginAPI(loginForm)//改造： const res = await request.post('/authorizations', loginForm)
         dispatch(setTokenInfo(res.data.token))
     }
 }
@@ -47,7 +48,7 @@ export const fetchLogin = (loginForm) => {
 //🦖获取个人用户信息异步方法
 export const fetchUserInfo = () => {
     return async (dispatch) => {
-        const res = await request.get('/user/profile')
+        const res = await getUserInfoAPI() //改造： const res = await request.get('/user/profile')
         dispatch(setUserInfo(res.data))
     }
 }
