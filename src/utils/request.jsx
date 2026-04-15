@@ -1,5 +1,8 @@
 import axios from 'axios'
-import { getToken } from '@/utils'
+import { getToken, removeToken } from '@/utils'
+import { useNavigate } from 'react-router-dom'
+
+
 
 const request = axios.create({
     baseURL: 'http://geek.itheima.net/v1_0',
@@ -25,11 +28,19 @@ request.interceptors.response.use(
     (response) => {
         // 2xx 范围内的状态码都会触发该函数。
         // 对响应数据做点什么
+
         return response.data
     },
     (error) => {
         // 超出 2xx 范围的状态码都会触发该函数。
         // 对响应错误做点什么
+        if(error.response.status===401){
+            // 若toekn在后端过期失效，返回状态码为401，就跳转到登录页
+            removeToken()
+            navigate('/login')
+            window.location.reload()//刷新窗口
+        }
+
         return Promise.reject(error)
     })
 
