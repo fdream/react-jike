@@ -1,5 +1,12 @@
 //统一中转导出 就是from前面不同但后面统一
 //import { request } from '@/utils'
-import { http } from './request'
+import { request } from './request'
+import { getToken, setToken, removeToken } from './token'
 
-export { http }
+
+export {
+    request,
+    getToken,
+    setToken,
+    removeToken
+}
