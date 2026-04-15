@@ -8,19 +8,28 @@ const userStore = createSlice({
         token: getToken() || '', //从获取token
         userInfo: {}
     },
-    //🦖同步修改方法
+    //同步修改方法
     reducers: {
+        //🦖保存token信息 ps：本项目toekn与userInfo是分开存储的
         setTokenInfo(state, action) {
-            state.token = action.payload//存到redux状态中
-            setToken(action.payload)//存到localStorage中
+            state.token = action.payload//1.存到redux状态中
+            setToken(action.payload)//2.存到localStorage中
         },
+        //🦖保存用户信息
         setUserInfo(state, action) {
             state.userInfo = action.payload
+        },
+        //清除用户信息
+        clearUserInfo(state, action) {
+            state.token = ''
+            state.userInfo = {}
+            removeToken()
         }
     }
 })
 
-export const { setTokenInfo, setUserInfo } = userStore.actions//导出同步修改方法给异步用
+// 解构出同步修改方法给异步用,导出部分方法给外面用
+export const { setTokenInfo, setUserInfo, clearUserInfo } = userStore.actions
 export default userStore.reducer//导出reducer
 // 替换成上面const userReducer = userStore.reducer
 
