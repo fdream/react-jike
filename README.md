@@ -1,36 +1,35 @@
 # react-jike（React + Vite）
 
+> ✨ 一个仿 `jike/juejin` 风格的前端练习：`React` + `Ant Design` + `富文本`，让你用项目来巩固知识。
+> 🚀 登录后可进行文章管理与发布。
+
 一个仿 `jike/juejin` 风格的前端练习项目：包含登录、文章列表、发布文章、富文本编辑、封面上传等功能。
 
-## 技术栈
+## 技术栈 🧰
 
-- React（当前版本：`^19.2.4`）
-- React Router（`react-router-dom`）
-- Redux Toolkit（状态管理：登录 token 与用户信息）
-- Ant Design（UI 组件）
-- Axios（统一请求封装）
-- ECharts（首页图表展示）
-- React Quill（富文本编辑）
+- React（当前版本：`^19.2.4`）⚛️
+- React Router（`react-router-dom`）🧭
+- Redux Toolkit（状态管理：登录 token 与用户信息）🗂️
+- Ant Design（UI 组件）🎨
+- Axios（统一请求封装）📡
+- ECharts（首页图表展示）📊
+- React Quill（富文本编辑）✍️
 
-## 功能概览
+## 功能概览 ✨
 
-1. 登录页（`/login`）
+1. 登录页（`/login`）🔐
    - 输入 `mobile` + `code` 后调用后端登录接口
    - 登录成功后保存 `token`，并跳转到主页
-
-2. 布局页（`/` 下的子路由）
+2. 布局页（`/` 下的子路由）🧩
    - 顶部显示用户名与退出登录
    - 左侧菜单包含：`首页` / `文章管理` / `创建文章`
    - 进入布局后会自动拉取用户信息
-
-3. 首页（`/home`）
+3. 首页（`/home`）🏠
    - 使用 ECharts 展示柱状图示例
-
-4. 文章管理（`/article`）
+4. 文章管理（`/article`）📰
    - 表格展示文章列表（封面、标题、状态、发布时间、阅读/评论/点赞数等）
    - 页面提供筛选表单（状态/频道/日期），但当前示例未将筛选条件用于接口请求
-
-5. 发布文章（`/publish`）
+5. 发布文章（`/publish`）✍️
    - 表单包含：标题、频道、封面上传（单图/三图/无图）、富文本内容
    - 点击提交后调用发布文章接口
 
@@ -74,7 +73,7 @@
 - 请求拦截器会在本地存在 token 时自动追加：
   - `Authorization: Bearer ${token}`
 
-## 本地运行
+## 本地运行 🏃
 
 1. 安装依赖
    - `npm install`

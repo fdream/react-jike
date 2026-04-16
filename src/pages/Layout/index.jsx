@@ -77,7 +77,7 @@ const GeekLayout = () => {
                         defaultSelectedKeys={[selectedKeys]}//高亮当前路由
                         items={items}
                         style={{ height: '100%', borderRight: 0 }}
-                        onClick={onMenuClick}//点击导航栏跳转二级路由
+                        onClick={onMenuClick}  //点击导航栏跳转二级路由
                     ></Menu>
                 </Sider>
                 <Layout className="layout-content" style={{ padding: 20 }}>
