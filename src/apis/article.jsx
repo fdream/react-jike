@@ -14,6 +14,15 @@ export function publishArticleAPI(formData) {
     return request({
         url: '/mp/articles?draft=false',
         method: 'POST',
-        data:formData,//同名可省略
+        data:formData,
+    })
+}
+
+//获取文章列表接口
+export function getArticleListAPI(params) {
+    return request({
+        url: '/mp/articles',
+        method: 'GET',
+        params,         //同名可省略
     })
 }

@@ -1,39 +1,20 @@
-import {
-    Card,
-    Breadcrumb,
-    Form,
-    Button,
-    Radio,
-    Input,
-    Upload,
-    Space,
-    Select
-} from 'antd'
+import {Card,Breadcrumb,Form,Button,Radio,Input,Upload,Space,Select} from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import { message } from 'antd'
 import './index.scss'
+// 导入富文本编辑器
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
-import { getArticleChannelAPI } from '@/apis/article'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { publishArticleAPI } from '@/apis/article'
+import { useChannel } from '@/hooks/useChannel'
 
 const { Option } = Select
 const Publish = () => {
-    const [channelList, setChannelList] = useState([])
-    
+    const channelList = useChannel()
 
-    // 获取频道列表
-    useEffect(() => {
-        const getChannelList = async () => {
-                const res = await getArticleChannelAPI()
-                setChannelList(res.data.channels)
-        }
-        getChannelList()
-    }, [])
-
-    // 处理表单提交
+       // 处理表单提交
     const onFinish = async (formData) => {
         //校验图片类型按钮与实际上传的图片数量是否一致
         if(imageType !== imageList.length) return message.error('请上传正确的图片数量')
