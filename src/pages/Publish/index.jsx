@@ -14,7 +14,7 @@ const { Option } = Select
 const Publish = () => {
     const channelList = useChannel()
 
-       // 处理表单提交
+    // 处理表单提交
     const onFinish = async (formData) => {
         //校验图片类型按钮与实际上传的图片数量是否一致
         if(imageType !== imageList.length) return message.error('请上传正确的图片数量')
@@ -30,6 +30,7 @@ const Publish = () => {
         }
         console.log('提交表单值:', reqData)
         publishArticleAPI(reqData)
+        message.success('发布成功')
     }
 
     // 获取上传组件的上传文件

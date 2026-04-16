@@ -14,7 +14,16 @@ const { Option } = Select
 const { RangePicker } = DatePicker
 
 const Article = () => {
+    //频道列表数据
     const channelList = useChannel()
+
+    //文章状态枚举数据  两个：三元短路与  多个：用枚举
+    const articleStatusEnum = {
+        1: <Tag color="warning">待审核</Tag>,
+        2: <Tag color="success">审核通过</Tag>,
+        3: <Tag color="danger">审核不通过</Tag>,
+        4: <Tag color="default">草稿</Tag>,
+    }
 
     // 准备列数据
     const columns = [
@@ -34,7 +43,7 @@ const Article = () => {
         {
             title: '状态',
             dataIndex: 'status',
-            render: data => <Tag color="green">审核通过</Tag>
+            render: data => articleStatusEnum[data] //文章状态显示
         },
         {
             title: '发布时间',
