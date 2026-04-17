@@ -67,7 +67,7 @@ const Article = () => {
                 return (
                     <Space size="middle">
                         <Button type="primary" shape="circle" icon={<EditOutlined />} 
-                        onClick={() => navigate(`/publish/?id=${data.id}`)} />//Query传参数
+                        onClick={() => navigate(`/publish/?id=${data.id}`)} />
                         <Popconfirm
                             title="确认删除该条文章吗?"
                             description="我是具体描述"
