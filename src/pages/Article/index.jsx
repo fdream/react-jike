@@ -131,7 +131,6 @@ const Article = () => {
 
     //4..条件筛选获取文章列表数据
     const onFinish = (formData) => {
-        console.log('formData:', +formData.date)
         setReqParams({
             ...reqParams,
             channel_id: formData.channel_id,

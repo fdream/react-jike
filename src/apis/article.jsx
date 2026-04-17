@@ -45,9 +45,9 @@ export function delArticleAPI(id) {
 
 
 //编辑文章接口
-export function editArticleAPI(id,formData) {
+export function updateArticleAPI(formData) {
     return request({
-        url: `/mp/articles/${id}`, 
+        url: `/mp/articles/${formData.id}?draft=false`, 
         method: 'PUT',
         data:formData,
     })

@@ -7,17 +7,19 @@ import './index.scss'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 import { useState } from 'react'
-import { publishArticleAPI, getArticleDetailAPI } from '@/apis/article'
+import { publishArticleAPI, getArticleDetailAPI, updateArticleAPI } from '@/apis/article'
 import { useChannel } from '@/hooks/useChannel'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams,useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
 
 const { Option } = Select
 const Publish = () => {
+    const navigate = useNavigate()
+    // 获取渠道列表
     const channelList = useChannel()
 
-    // 处理表单提交
+    // 发布/更新文章-提交表单
     const onFinish = async (formData) => {
         //校验图片类型按钮与实际上传的图片数量是否一致
         if(imageType !== imageList.length) return message.error('请上传正确的图片数量')
@@ -26,29 +28,33 @@ const Publish = () => {
             title,
             content,
             cover:{
-                type:imageType,//上传数量要求
-                images:imageList.map(item => item.response.data.url)//上传格式要求，提取url
+                type:imageType,     //上传数量要求
+                images: imageList.map(item => item.response ? item.response.data.url : item.url)
             },
             channel_id,
         }
-        console.log('提交表单值:', reqData)
-        publishArticleAPI(reqData)
-        message.success('发布成功')
+        if(articleId){
+            await updateArticleAPI({...reqData,id:articleId})//解构补参
+            navigate('/article')
+        }else{
+            await  publishArticleAPI(reqData)
+        }
+            message.success('发布成功')
     }
 
     // 获取上传组件的上传文件
     const [imageList, setImageList] = useState([])
-    const onChange = (value) => {
-        console.log("上传组件内的上传文件数据" //file：文件信息 fileList：文件列表
-            ,value
-            ,value.file
-            ,value.fileList
-            ,value.fileList.map(item => item.response.data.url)
-        )
+    const onChange = (value) => { //🎈不要提前遍历，遍历后没有UID,无法渲染到上传组件中回显
         setImageList(value.fileList)
+        console.log("上传组件内的上传文件数据")
+        console.log("value:", value)
+        console.log("file文件信息:", value.file)
+        console.log("fileList文件列表:", value.fileList)
+        console.log("图片列表:状态变量异步更新只能打印旧值",
+            imageList.map(item => item.response ? item.response.data.url : item.url))
     }
 
-    // 依据封面图片数量改变，控制上传图片按钮显隐
+    // 依据封面选项改变，控制上传按钮显隐
     const [imageType, setImageType] = useState(0)
     const onChangeByType = (value) => {
         setImageType(value.target.value)
@@ -68,7 +74,9 @@ const Publish = () => {
             setImageType(res.data.cover.type)//②回填上传框cover.type
             setImageList(res.data.cover.images.map(item => ({url:item})))//③回显原文件
         }
-        getArticleDetail()
+        if(articleId){
+            getArticleDetail()//JS看到就执行
+        }
     }, [articleId,form])
 
 
@@ -79,7 +87,8 @@ const Publish = () => {
                 title={
                     <Breadcrumb items={[
                         { title: <Link to={'/'}>首页</Link> },
-                        { title: '发布文章' },
+                        { title: articleId ? '编辑文章' : '发布文章'},
+                        // { title: `${articleId ? '编辑' : '发布'}文章`},
                     ]}/>
                 }
             >
@@ -87,7 +96,7 @@ const Publish = () => {
                     labelCol={{ span: 4 }}
                     wrapperCol={{ span: 16 }}
                     initialValues={{ type: imageType }}//控制整个表单各项初始值
-                    onFinish={onFinish}//点击提交按钮，自动提交表单数据
+                    onFinish={onFinish} //点击提交按钮，自动提交表单数据
                     form={form}
                 >
                     <Form.Item
@@ -116,14 +125,14 @@ const Publish = () => {
                                 <Radio value={0}>无图</Radio>
                             </Radio.Group>
                         </Form.Item>
-                        {/* 文件上传没有Item的name了 */}
+                        {/* 文件上传没有Item的name了,需要单独设置 */}
                         {imageType !== 0 && ( // 根据封面单选，有封面时才显示上传按钮
                         <Upload
                             listType="picture-card" //外观样式
                             showUploadList   //是否显示上传列表
                             action={'http://geek.itheima.net/v1_0/upload'}//上传接口
                             name='image'  //上传文件的名称
-                            onChange={onChange}
+                            onChange={onChange} //上传文件数据
                             maxCount={imageType}
                             fileList={imageList}//编辑时回显
                         >
