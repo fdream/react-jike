@@ -11,7 +11,7 @@ const Login = () => {
     const navigate = useNavigate()
     const onFinish = async (values) => {
         await dispatch(fetchLogin(values))
-        navigate('/Home')
+        navigate('/layout/home')
         message.success('登录成功,即将跳转首页...')
     }
 

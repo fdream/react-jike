@@ -6,11 +6,14 @@ import { AuthRoute } from '@/components/AuthRoute';
 import Home from '@/pages/Home';
 import Article from '@/pages/Article';
 import Publish from '@/pages/Publish';
+import { Navigate } from 'react-router-dom';
+
+
 
 const router = createBrowserRouter([
     {
         path: '/',
-        redirect: '/login',
+        element: <Navigate to="/login" />,//好像没有重定向redirect
     },
     {
         path: '/login',
@@ -22,15 +25,15 @@ const router = createBrowserRouter([
         element: <Layout />,
         children: [
             {
-                path: '/home',
+                path: 'home',  //子路由的父路由非空，就要加/
                 element: <Home />,
             },
             {
-                path: '/article',
+                path: 'article',
                 element: <Article />,
             },
             {
-                path: '/publish',
+                path: 'publish',
                 element: <Publish />,
             },
         ]
