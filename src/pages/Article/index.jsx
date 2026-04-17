@@ -8,8 +8,8 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import img404 from '@/assets/error.png'
 import { useChannel } from '@/hooks/useChannel'
 import { getArticleListAPI ,delArticleAPI} from '@/apis/article'
-import { useEffect, useState } from 'react'
-
+import { useNavigate } from 'react-router-dom'
+import { useState,useEffect } from 'react'
 const { Option } = Select
 const { RangePicker } = DatePicker
 
@@ -66,7 +66,8 @@ const Article = () => {
             render: data => {
                 return (
                     <Space size="middle">
-                        <Button type="primary" shape="circle" icon={<EditOutlined />} />
+                        <Button type="primary" shape="circle" icon={<EditOutlined />} 
+                        onClick={() => navigate(`/publish/?id=${data.id}`)} />//Query传参数
                         <Popconfirm
                             title="确认删除该条文章吗?"
                             description="我是具体描述"
@@ -78,6 +79,7 @@ const Article = () => {
                             type="primary"
                             danger
                             shape="circle"
+                            icon={<DeleteOutlined />}
                         />
                         </Popconfirm>
                     </Space>
@@ -101,7 +103,7 @@ const Article = () => {
         }
     ]
 
-    //请求参数  TODO 显式瞅瞅可省略吧
+    //封装请求参数状态变量  TODO 显式瞅瞅可省略吧
     const [reqParams, setReqParams] = useState({
         status: '',       //文章状态
         channel_id: '',   //频道id
@@ -116,18 +118,18 @@ const Article = () => {
     //文章总条数
     const [count, setCount] = useState(0)
 
-    //函数级组件获取文章列表数据
+    //2.函数级组件获取文章列表数据
     const getArticleList = async () => {
         const res = await getArticleListAPI(reqParams)
         setArticleList(res.data.results)
         setCount(res.data.total_count)
     }
-    //副作用管理
+    //3.副作用管理
     useEffect(() => {
         getArticleList()
     }, [reqParams])
 
-    //2.条件筛选获取文章列表数据
+    //4..条件筛选获取文章列表数据
     const onFinish = (formData) => {
         console.log('formData:', +formData.date)
         setReqParams({
@@ -140,7 +142,7 @@ const Article = () => {
         //触发useEffect
     }
 
-    //分页改变
+    //5.分页改变
     const onPageChange = (page) => {
         setReqParams({
             ...reqParams,
@@ -149,13 +151,15 @@ const Article = () => {
         //触发useEffect
     }
 
-    //删除文章
+    //6.删除文章
     const ondelArticle = async (data)=>{
         await delArticleAPI(data.id)//async声明异步函数 await等待删除接口返回后再执行后续代码
-        getArticleList()//手动调用
+        getArticleList()            //手动调用
         message.success('删除成功')
     }
 
+    //
+    const navigate = useNavigate()
     return (
         <div>
             <Card

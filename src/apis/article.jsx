@@ -27,10 +27,28 @@ export function getArticleListAPI(params) {
     })
 }
 
+//获取文章详情
+export function getArticleDetailAPI(id) {
+    return request({
+        url: `/mp/articles/${id}`,
+        method: 'GET',
+    })
+}
+
 //删除文章接口
 export function delArticleAPI(id) {
     return request({
         url: `/mp/articles/${id}`, //路径参数：模板字符串/用拼接字符串也行+
         method: 'DELETE',
+    })
+}
+
+
+//编辑文章接口
+export function editArticleAPI(id,formData) {
+    return request({
+        url: `/mp/articles/${id}`, 
+        method: 'PUT',
+        data:formData,
     })
 }

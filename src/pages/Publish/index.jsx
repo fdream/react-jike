@@ -7,8 +7,11 @@ import './index.scss'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 import { useState } from 'react'
-import { publishArticleAPI } from '@/apis/article'
+import { publishArticleAPI, getArticleDetailAPI } from '@/apis/article'
 import { useChannel } from '@/hooks/useChannel'
+import { useSearchParams } from 'react-router-dom'
+import { useEffect } from 'react'
+
 
 const { Option } = Select
 const Publish = () => {
@@ -45,11 +48,28 @@ const Publish = () => {
         setImageList(value.fileList)
     }
 
-    // 封面数量改变，控制上传图片按钮显隐
+    // 依据封面图片数量改变，控制上传图片按钮显隐
     const [imageType, setImageType] = useState(0)
     const onChangeByType = (value) => {
         setImageType(value.target.value)
     }
+
+    // 编辑文章时，获取文章详情回显
+    const [searchParams, setSearchParams] = useSearchParams()//获取路由参数
+    const articleId = searchParams.get('id')
+    const [form] = Form.useForm()//获取表单实例
+    useEffect(() => {
+        async function getArticleDetail(){
+            const res=await getArticleDetailAPI(articleId)
+            form.setFieldsValue({//封装技巧const data = res.data const {cover} = data
+                ...res.data,                //...data
+                type: res.data.cover.type  //①回填单选type:cover.type 
+            })
+            setImageType(res.data.cover.type)//②回填上传框cover.type
+            setImageList(res.data.cover.images.map(item => ({url:item})))//③回显原文件
+        }
+        getArticleDetail()
+    }, [articleId,form])
 
 
 
@@ -68,6 +88,7 @@ const Publish = () => {
                     wrapperCol={{ span: 16 }}
                     initialValues={{ type: imageType }}//控制整个表单各项初始值
                     onFinish={onFinish}//点击提交按钮，自动提交表单数据
+                    form={form}
                 >
                     <Form.Item
                         label="标题"
@@ -104,6 +125,7 @@ const Publish = () => {
                             name='image'  //上传文件的名称
                             onChange={onChange}
                             maxCount={imageType}
+                            fileList={imageList}//编辑时回显
                         >
                             <div style={{ marginTop: 8 }}>
                                 <PlusOutlined />
