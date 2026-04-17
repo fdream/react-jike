@@ -14,7 +14,7 @@ export function publishArticleAPI(formData) {
     return request({
         url: '/mp/articles?draft=false',
         method: 'POST',
-        data:formData,
+        data:formData,   //请求体
     })
 }
 
@@ -23,6 +23,14 @@ export function getArticleListAPI(params) {
     return request({
         url: '/mp/articles',
         method: 'GET',
-        params,         //同名可省略
+        params,         //Query参数:同名可省略
+    })
+}
+
+//删除文章接口
+export function delArticleAPI(id) {
+    return request({
+        url: `/mp/articles/${id}`, //路径参数：模板字符串/用拼接字符串也行+
+        method: 'DELETE',
     })
 }

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select } from 'antd'
+import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select, Popconfirm, message } from 'antd'
 // 引入日期选择器的中文显示
 // import locale from 'antd/es/date-picker/locale/zh_CN'
 // 导入资源
@@ -7,14 +7,14 @@ import { Table, Tag, Space } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import img404 from '@/assets/error.png'
 import { useChannel } from '@/hooks/useChannel'
-import { getArticleListAPI } from '@/apis/article'
+import { getArticleListAPI ,delArticleAPI} from '@/apis/article'
 import { useEffect, useState } from 'react'
 
 const { Option } = Select
 const { RangePicker } = DatePicker
 
 const Article = () => {
-    //频道列表数据
+    //频道列表数据hook
     const channelList = useChannel()
 
     //文章状态枚举数据  两个：三元短路与  多个：用枚举
@@ -67,12 +67,19 @@ const Article = () => {
                 return (
                     <Space size="middle">
                         <Button type="primary" shape="circle" icon={<EditOutlined />} />
+                        <Popconfirm
+                            title="确认删除该条文章吗?"
+                            description="我是具体描述"
+                            onConfirm={() => ondelArticle(data)}
+                            okText="确认"
+                            cancelText="取消"
+                            >
                         <Button
                             type="primary"
                             danger
                             shape="circle"
-                            icon={<DeleteOutlined />}
                         />
+                        </Popconfirm>
                     </Space>
                 )
             }
@@ -108,13 +115,15 @@ const Article = () => {
     const [articleList, setArticleList] = useState([])
     //文章总条数
     const [count, setCount] = useState(0)
+
+    //函数级组件获取文章列表数据
+    const getArticleList = async () => {
+        const res = await getArticleListAPI(reqParams)
+        setArticleList(res.data.results)
+        setCount(res.data.total_count)
+    }
+    //副作用管理
     useEffect(() => {
-        async function getArticleList() {
-        // const getArticleList = async () => {
-            const res = await getArticleListAPI(reqParams)
-            setArticleList(res.data.results)
-            setCount(res.data.total_count)
-        }
         getArticleList()
     }, [reqParams])
 
@@ -128,17 +137,24 @@ const Article = () => {
             begin_pubdate: formData.date[0].format('YYYY-MM-DD'),
             end_pubdate: formData.date[1].format('YYYY-MM-DD')
         })
-        //获取文章列表数据,触发useEffect
+        //触发useEffect
     }
 
     //分页改变
     const onPageChange = (page) => {
-        setReqParams({ 
-            ...reqParams, 
+        setReqParams({
+            ...reqParams,
             page
         })
+        //触发useEffect
     }
 
+    //删除文章
+    const ondelArticle = async (data)=>{
+        await delArticleAPI(data.id)//async声明异步函数 await等待删除接口返回后再执行后续代码
+        getArticleList()//手动调用
+        message.success('删除成功')
+    }
 
     return (
         <div>
