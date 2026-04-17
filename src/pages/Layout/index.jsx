@@ -17,17 +17,17 @@ const { Header, Sider } = Layout
 const items = [
     {
         label: '首页',
-        key: '/home',
+        key: '/layout/home',
         icon: <HomeOutlined />,
     },
     {
         label: '文章管理',
-        key: '/article',
+        key: '/layout/article',
         icon: <DiffOutlined />,
     },
     {
         label: '创建文章',
-        key: '/publish',
+        key: '/layout/publish',
         icon: <EditOutlined />,
     },
 ]
@@ -42,8 +42,8 @@ const GeekLayout = () => {
     }
 
     //点击才高亮➡️根据当前页面高亮功能
-    const location = useLocation()
-    const selectedKeys = location.pathname
+    const location = useLocation()//获取当前路由信息对象
+    const selectedKeys = location.pathname//获取当前路由路径名
     
     //自动获取用户信息显式action
     useEffect(() => {
